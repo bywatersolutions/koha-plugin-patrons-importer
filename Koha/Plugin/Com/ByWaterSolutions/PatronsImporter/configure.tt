@@ -1,0 +1,189 @@
+[% USE Dumper %]
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+ <title>Koha: UMS Collections plugin: Configuration</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; UMS Collections &rsaquo; Configuration</div>
+
+<div id="doc3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Utilities</h3>
+      </div>
+      <div class="panel-body">
+        [% IF test_completed %]
+            <div class="alert alert-success" role="alert">Test completed successfully!</div>
+        [% ELSIF test_results %]
+            <div class="alert alert-error" role="alert">Test completed with errors: <pre>[% test_results %]</pre></div>
+        [% ELSE %]
+            <form method="get">
+              <input type="hidden" name="class" value="[% CLASS %]"/>
+              <input type="hidden" name="method" value="[% METHOD %]"/>
+              <input type="hidden" name="test" value="1" />
+              <div class="form-group">
+                  <label for="run-test-connection">Test SFTP connection</label>
+                  <button type="submit" id="run-test-connection" class="btn btn-default">Test</button>
+                  <span id="helpBlock" class="help-block">Test the SFTP connection using the data provided below.</span>
+              </div>
+            </form>
+        [% END %]
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Settings</h3>
+        </div>
+
+        <form method="get">
+          <input type="hidden" name="class" value="[% CLASS %]"/>
+          <input type="hidden" name="method" value="[% METHOD %]"/>
+          <input type="hidden" name="save" value="1" />
+
+          <div class="form-group">
+            <label for="run_on_dow">Day of week to run on</label>
+            <select name="run_on_dow" class="form-control">
+              <option value="" [% IF run_on_dow == "" %]selected="selected"[% END %]>Every day</option>
+              <option value="0" [% IF run_on_dow == 0 %]selected="selected"[% END %]>Sunday</option>
+              <option value="1" [% IF run_on_dow == 1 %]selected="selected"[% END %]>Monday</option>
+              <option value="2" [% IF run_on_dow == 2 %]selected="selected"[% END %]>Tuesday</option>
+              <option value="3" [% IF run_on_dow == 3 %]selected="selected"[% END %]>Wednesday</option>
+              <option value="4" [% IF run_on_dow == 4 %]selected="selected"[% END %]>Thursday</option>
+              <option value="5" [% IF run_on_dow == 5 %]selected="selected"[% END %]>Friday</option>
+              <option value="6" [% IF run_on_dow == 6 %]selected="selected"[% END %]>Saturday</option>
+            </select>
+            <span class="help-block">Please ensure that your system administrator has enabled the cronjob <em>plugins_nightly.pl</em>.</span>
+          </div>
+
+          <fieldset>
+              <legend>SFTP connection</legend>
+
+              <div class="form-group">
+                <label for="host">Host</label>
+                <input type="text" name="host" class="form-control" value="[% host %]">
+              </div>
+
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" value="[% username %]">
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" value="[% password %]">
+              </div>
+
+              <div class="form-group">
+                <label for="dir">Remote directory</label>
+                <input type="dir" name="dir" class="form-control" value="[% dir %]">
+              </div>
+
+              <div class="form-group">
+                <label for="filename">Remote file name</label>
+                <input type="filename" name="filename" class="form-control" value="[% filename %]">
+              </div>
+          </fieldset>
+
+          <fieldset>
+              <legend>Command options</legend>
+
+              <div class="form-group">
+                <label for="debug">Debug mode</label>
+                <input type="text" name="debug" class="form-control" value="[% debug %]">
+                <span class="help-block">Add more output to logs.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="confirm">Enable production mode</label>
+                <input type="checkbox" name="confirm" class="form-control" value="1" [% IF confirm %]checked[% END %]>
+                <span class="help-block">If not checked, imports will be run in test mode.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="matchpoint">Matchpoint</label>
+                <select name="matchpoint">
+                    <option value="cardnumber" [% IF matchpoint == 'cardnumber' %]selected[% END %]>cardnumber</option>
+                    <option value="borrowernumber" [% IF matchpoint == 'borrowernumber' %]selected[% END %]>borrowernumber</option>
+                </select>
+                <span class="help-block">Choose which column to match use for overlaying existing patron records.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="default">Set default values</label>
+                <input type="text" name="default" class="form-control" value="[% default %]">
+                <span class="help-block">e.g. <pre>branchcode=MPL</pre></span>
+              </div>
+
+              <div class="form-group">
+                <label for="overwrite">Overwrite existing patrons</label>
+                <input type="checkbox" name="overwrite" class="form-control" value="1" [% IF overwrite %]checked[% END %]>
+                <span class="help-block">Overwrite existing patrons with new data if a match is found.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="preserve_field"></label>
+                <input type="text" name="preserve_field" class="form-control" value="[% preserve_field %]">
+                <span class="help-block">Prevent specified patron fields for existing patrons from being overwritten.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="preserve_extended_attributes">Preserve extended attributes</label>
+                <input type="checkbox" name="preserve_extended_attributes" class="form-control" value="1" [% IF preserve_extended_attributes %]checked[% END %]>
+                <span class="help-block">Retain extended patron attributes for existing patrons being overwritten.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="update_expiration">Update patron expiration dates</label>
+                <input type="checkbox" name="update_expiration" class="form-control" value="1" [% IF update_expiration %]checked[% END %]>
+                <span class="help-block">If a matching patron is found, extend the expiration date of their account using the patron's enrollment date as the base.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="expiration_from_today">Expiration from today</label>
+                <input type="checkbox" name="expiration_from_today" class="form-control" value="1" [% IF expiration_from_today %]checked[% END %]>
+                <span class="help-block">If a matching patron is found, extend the expiration date of their account using today's date as the base.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="verbose">Expiration from today</label>
+                <input type="checkbox" name="verbose" class="form-control" value="1" [% IF verbose %]checked[% END %]>
+                <span class="help-block">Enable verbose mode on the patron importer script.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="extra_options">Extra paramters</label>
+                <input type="text" name="extra_options" class="form-control" value="[% extra_options %]">
+                <span class="help-block">Add any additional command line options here.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="q"></label>
+                <input type="text" name="q" class="form-control" value="[% q %]">
+                <span class="help-block"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="q"></label>
+                <input type="text" name="q" class="form-control" value="[% q %]">
+                <span class="help-block"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="q"></label>
+                <input type="text" name="q" class="form-control" value="[% q %]">
+                <span class="help-block"></span>
+              </div>
+
+          </fieldset>
+
+
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+
+[% INCLUDE 'intranet-bottom.inc' %]
