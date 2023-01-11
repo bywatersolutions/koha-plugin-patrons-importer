@@ -67,9 +67,11 @@ sub configure {
             run_on_dow => $self->retrieve_data('run_on_dow'),
             host       => $self->retrieve_data('host'),
             username   => $self->retrieve_data('username'),
-            password   => Koha::Encryption->new->decrypt_hex(
+            password   => $self->retrieve_data('password')
+            ? Koha::Encryption->new->decrypt_hex(
                 $self->retrieve_data('password')
-            ),
+              )
+            : q{},
             dir                   => $self->retrieve_data('dir'),
             filename              => $self->retrieve_data('filename'),
             confirm               => $self->retrieve_data('confirm'),
