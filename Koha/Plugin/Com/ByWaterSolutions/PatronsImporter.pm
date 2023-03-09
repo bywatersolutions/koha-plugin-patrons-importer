@@ -10,6 +10,7 @@ use Koha::Encryption;
 
 use File::Temp qw(tempdir);
 use Net::SFTP::Foreign;
+use Try::Tiny;
 
 ## Here we set our plugin version
 our $VERSION         = "{VERSION}";
@@ -94,7 +95,7 @@ sub configure {
             }
             catch {
                 $template->param( test_completed => 1, test_results => $_ );
-            }
+            };
         }
 
         $self->output_html( $template->output() );
