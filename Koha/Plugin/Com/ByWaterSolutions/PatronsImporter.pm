@@ -186,8 +186,6 @@ sub cronjob_nightly {
     my $tempdir = tempdir();
     #$sftp->setcwd($sftp_dir) or die "unable to change cwd: " . $sftp->error;
 
-    my $tempdir = tempdir();
-
     warn qq{DOWNLOADING '$sftp_dir/$sftp_filename' TO '$tempdir/$sftp_filename'};
     $sftp->get( "$sftp_dir/$sftp_filename", "$tempdir/$sftp_filename" )
       or die "Patrons Importer - SFTP ERROR: get failed: " . $sftp->error;
