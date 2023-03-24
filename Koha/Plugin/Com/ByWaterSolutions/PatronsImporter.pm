@@ -94,8 +94,10 @@ sub configure {
                 my $sftp = $self->get_sftp();
             }
             catch {
-                $template->param( test_completed => 1, test_results => $_ );
+                $template->param( test_error => $_ );
             };
+
+            $template->param( test_completed => 1 );
         }
 
         $self->output_html( $template->output() );
@@ -182,8 +184,12 @@ sub cronjob_nightly {
     my $sftp = $self->get_sftp();
 
     my $tempdir = tempdir();
+    #$sftp->setcwd($sftp_dir) or die "unable to change cwd: " . $sftp->error;
 
-    $sftp->get( $sftp_filename, "$tempdir/$sftp_filename" )
+    my $tempdir = tempdir();
+
+    warn qq{DOWNLOADING '$sftp_dir/$sftp_filename' TO '$tempdir/$sftp_filename'};
+    $sftp->get( "$sftp_dir/$sftp_filename", "$tempdir/$sftp_filename" )
       or die "Patrons Importer - SFTP ERROR: get failed: " . $sftp->error;
 
     my $confirm               = $self->retrieve_data('confirm');
@@ -212,13 +218,11 @@ sub cronjob_nightly {
     $cmd .= " --verbose"                      if $verbose;
     $cmd .= " $extra_options"                 if $extra_options;
 
-    warn "COMMAND: $cmd" if $debug;
-
+    say "COMMAND: $cmd";
     my $output = qx{$cmd};
+    say "COMMAND OUTPUT: $output";
 
-    warn "COMMAND OUTPUT: $output" if $debug;
-
-    unlink "$tempdir/$sftp_filename";
+    #unlink "$tempdir/$sftp_filename";
 }
 
 =head3 install
