@@ -180,6 +180,7 @@ sub cronjob_nightly {
     }
 
     my $sftp_filename = $self->retrieve_data('filename');
+    my $sftp_dir = $self->retrieve_data('dir');
 
     my $sftp = $self->get_sftp();
 
