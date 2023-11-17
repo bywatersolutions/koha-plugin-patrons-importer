@@ -94,8 +94,8 @@
 
               <div class="form-group">
                 <label for="debug">Debug mode</label>
-                <input type="text" name="debug" class="form-control" value="[% debug %]">
-                <span class="help-block">Add more output to logs.</span>
+                <input type="text" name="debug" class="form-control" value="[% debug || 0 %]">
+                <span class="help-block">Add more output to logs. Set to a whole number, the larger the number the more verbose the output.</span>
               </div>
 
               <div class="form-group">
@@ -156,7 +156,7 @@
               </div>
 
               <div class="form-group">
-                <label for="extra_options">Extra paramters</label>
+                <label for="extra_options">Extra parameters</label>
                 <input type="text" name="extra_options" class="form-control" value="[% extra_options %]">
                 <span class="help-block">Add any additional command line options here.</span>
               </div>
