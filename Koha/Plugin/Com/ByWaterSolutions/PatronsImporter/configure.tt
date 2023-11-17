@@ -160,25 +160,6 @@
                 <input type="text" name="extra_options" class="form-control" value="[% extra_options %]">
                 <span class="help-block">Add any additional command line options here.</span>
               </div>
-
-              <div class="form-group">
-                <label for="q"></label>
-                <input type="text" name="q" class="form-control" value="[% q %]">
-                <span class="help-block"></span>
-              </div>
-
-              <div class="form-group">
-                <label for="q"></label>
-                <input type="text" name="q" class="form-control" value="[% q %]">
-                <span class="help-block"></span>
-              </div>
-
-              <div class="form-group">
-                <label for="q"></label>
-                <input type="text" name="q" class="form-control" value="[% q %]">
-                <span class="help-block"></span>
-              </div>
-
           </fieldset>
 
 
